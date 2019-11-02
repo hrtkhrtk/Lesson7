@@ -88,3 +88,8 @@ task run(type: Exec) {
     def adb = path + "/platform-tools/adb"
     commandLine "$adb", 'shell', 'am', 'start', '-n', 'jp.techacademy.hirotaka.iwasaki.jumpactiongame/jp.techacademy.hirotaka.iwasaki.jumpactiongame.AndroidLauncher'
 }
+
+// 下記、追加する
+dependencies {
+    implementation 'com.google.android.gms:play-services:6.+'
+}
