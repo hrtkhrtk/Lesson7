@@ -1,6 +1,7 @@
 package jp.techacademy.hirotaka.iwasaki.jumpactiongame
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Preferences // ←追加する
 import com.badlogic.gdx.ScreenAdapter
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
@@ -48,6 +49,7 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
     private var mFont: BitmapFont   // ←追加する
     private var mScore: Int // ←追加する
     private var mHighScore: Int // ←追加する
+    private var mPrefs: Preferences // ←追加する
 
     init {
         // 背景の準備
@@ -78,6 +80,10 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
         mFont.data.setScale(0.8f)   // ←追加する
         mScore = 0  // ←追加する
         mHighScore = 0  // ←追加する
+
+        // ハイスコアをPreferencesから取得する
+        mPrefs = Gdx.app.getPreferences("jp.techacademy.hirotaka.iwasaki.jumpactiongame") // ←追加する
+        mHighScore = mPrefs.getInteger("HIGHSCORE", 0) // ←追加する
 
         createStage()
     }
@@ -229,7 +235,9 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
     }
 
     private fun updateGameOver() {
-
+        if (Gdx.input.justTouched()) {
+            mGame.screen = ResultScreen(mGame, mScore)
+        }
     }
 
     private fun checkCollision() {
@@ -252,6 +260,9 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
                 mScore++    // ←追加する
                 if (mScore > mHighScore) {  // ←追加する
                     mHighScore = mScore     // ←追加する
+                    //ハイスコアをPreferenceに保存する
+                    mPrefs.putInteger("HIGHSCORE", mHighScore)  // ←追加する
+                    mPrefs.flush()  // ←追加する
                 }   // ←追加する
                 break
             }
